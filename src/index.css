@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .slider {
+  width: 100%;
+  margin: 50px auto;
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  background-color: rgb(200, 200, 200);
+} */
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  z-index: 5;
+  background-color: #0f67fe;
+  overflow: visible;
+  cursor: pointer;
+}
+
+/* .slidecontainer {
+  transform: translateY(-10px);
+} */
