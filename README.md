@@ -1,3 +1,13 @@
+# Health Checkupt Form
+
+## Overview
+
+This is a form component project built with ReactJS and TailwindCSS using Vite It utilizes firebase (firestore) API to store form data
+
+## Demo/Testing url
+
+Open [testing site](https://jivi-web.netlify.app/) with your browser to see the result.
+
 ## Technologies Used
 
 - Reactjs: Reactjs is a React framework for building server-side rendered and statically generated applications.
