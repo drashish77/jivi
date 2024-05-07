@@ -8,14 +8,15 @@ interface RangeInputType {
   name: string;
 }
 const RangeInput = ({ value, color, name, min, max }: RangeInputType) => {
-  const progress = (value / 60) * 100;
+  const progress = ((value - min) / (max - min)) * 100 + 100;
+
   return (
     <div className={"flex items-center  gap-2 rounded-lg  p-2 relative"}>
       <Field
         type="range"
         name={name}
-        min={0}
-        max={60}
+        min={min}
+        max={max}
         style={{
           background: `linear-gradient(to right, ${color} ${progress}%, #DCE1E8 ${progress}%)`,
         }}
@@ -24,10 +25,10 @@ const RangeInput = ({ value, color, name, min, max }: RangeInputType) => {
         } [&::-webkit-slider-thumb]:!bg-primary`}
       />
       <span
-        style={{ insetInlineStart: `${Math.floor(progress)}%` }}
+        style={{ insetInlineStart: `${Math.floor(progress - 100)}%` }}
         className={`text-md font-semibold -z-10 absolute   top-6 `}
       >
-        {value + 60}
+        {value}
       </span>
       <span
         style={{ borderColor: color }}
@@ -48,9 +49,13 @@ const RangeInput = ({ value, color, name, min, max }: RangeInputType) => {
 
       <span
         className="text-sm text-gray-500  absolute start-0 -bottom-6"
-        style={{ display: progress === 0 ? "none" : "" }}
+        style={{ display: progress - 100 === 0 ? "none" : "" }}
       >
-        {min}
+        {name === "bloodPressureSys"
+          ? `<= ${min}`
+          : name === "bloodPressureDias"
+          ? `< ${min}`
+          : min}
       </span>
       {/* <span className="text-sm text-gray-500  absolute start-1/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
         80
@@ -60,7 +65,7 @@ const RangeInput = ({ value, color, name, min, max }: RangeInputType) => {
       </span> */}
       <span
         className="text-sm text-gray-500  absolute end-0 -bottom-6"
-        style={{ display: progress === 100 ? "none" : "" }}
+        style={{ display: progress - 100 === 100 ? "none" : "" }}
       >
         {">"} {max}
       </span>

@@ -3,28 +3,21 @@ import uuid4 from "uuid4";
 import { collection, addDoc } from "firebase/firestore";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { formSchema } from "./schema";
-
 import RangeInput from "./RangeInput";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import Model from "../Model";
+import { FormValues } from "../../../utlis/Types";
+import { useNavigate } from "react-router-dom";
 
 const FormComponent = () => {
   const [showModal, setShowModal] = useState(false);
-
+  let navigate = useNavigate();
   // const toggleModal = () => {
   //   setModal(!modal);
   // };
   var id = uuid4();
-  interface FormValues {
-    name: string;
-    dob: string;
-    heartRate: number;
-    bloodPressureSys: number;
-    bloodPressureDias: number;
-    gender: string;
-    id: string;
-  }
+
   const initialValues: FormValues = {
     name: "",
     dob: "",
@@ -52,7 +45,25 @@ const FormComponent = () => {
       const docRef = await addDoc(collection(db, "userData"), {
         ...payload,
       });
-      toast("Form Submitted!", {
+      // console.log("df", docRef.id);
+      if (docRef.id) {
+        toast.success("Form Submitted!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        // redirect("/thanks");
+        navigate("/thanks");
+        setShowModal(false);
+        actions.resetForm();
+      }
+    } catch (error) {
+      toast.error("Form submission failed, please try again!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -62,35 +73,34 @@ const FormComponent = () => {
         progress: undefined,
         theme: "light",
       });
-      setShowModal(false);
-      actions.resetForm();
-    } catch (error) {
       console.log(error);
     }
-    // console.log({ docRef });
-    // fetch("/api/nodemailer", {
-    //   method: "POST",
-    //   body: JSON.stringify(payload),
-    // })
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       toast.success("Form submitted successfully");
-    //       actions.resetForm();
-    //     } else {
-    //       toast.error("Form submission failed, please try again");
-    //     }
-    //     return res.json();
-    //   })
-    //   .then((data) => console.log({ data }));
+  };
+  const onChange = async (
+    values: FormValues,
+    actions: { resetForm: () => void }
+  ) => {
+    const payload = {
+      id: id,
+      heartRate: values.heartRate,
+      bloodPressureSys: values.bloodPressureSys,
+      bloodPressureDias: values.bloodPressureDias,
+      name: values.name,
+      dob: values.dob,
+      gender: values.gender,
+    };
   };
   return (
     <div className={`relative   `}>
       <div className={`relative z-30 w-full md:w-2/3 lg:w-1/3 mx-auto  `}>
+        <h2 className="pt-5 pb-3 border-b">Details</h2>
         <div className="">
           <Formik
             initialValues={initialValues}
             validationSchema={formSchema}
+            validateOnChange={true}
             onSubmit={onSubmit}
+            onChange={onChange}
           >
             {(props) => {
               const { errors, values, touched } = props;
@@ -98,13 +108,13 @@ const FormComponent = () => {
 
               return (
                 <Form className="">
-                  <div className="">{JSON.stringify(props.values)}</div>
+                  {/* <div className="">{JSON.stringify(props.values)}</div> */}
                   <div className="">
                     <div className="mt-10">
                       <h3 className="font-bold text-lg mb-2 ">
                         Heart Rate:
                         <span className="text-[#0F67FE] ml-2">
-                          {props.values.heartRate + 60}
+                          {props.values.heartRate}
                         </span>
                       </h3>
                       <RangeInput
@@ -251,22 +261,23 @@ const FormComponent = () => {
                   </div>
 
                   <div className=" relative mb-5 mt-8 lg:mt-8 ">
-                    {/* <button
-                      disabled={!errors}
-                      className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
+                    <button
+                      // disabled={!errors}
+                      // className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
+                      type="submit"
                       onClick={() => !errors && setShowModal(true)}
                     >
-                      Edit
-                    </button> */}
-                    <button
+                      Next
+                    </button>
+                    {/* <button
                       type="submit"
                       // type="button"
                       disabled={!props.errors}
                       className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
                     >
                       Next
-                    </button>
+                    </button> */}
                     {/* <button
                       type="submit"
                       disabled={props.isSubmitting}
