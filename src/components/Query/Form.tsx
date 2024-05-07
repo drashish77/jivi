@@ -14,9 +14,6 @@ const FormComponent = () => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState({});
   let navigate = useNavigate();
-  // const toggleModal = () => {
-  //   setModal(!modal);
-  // };
   var id = uuid4();
 
   const initialValues: FormValues = {
@@ -43,47 +40,13 @@ const FormComponent = () => {
     };
     setData(payload);
     setShowModal(true);
-    // try {
-    //   const docRef = await addDoc(collection(db, "userData"), {
-    //     ...payload,
-    //   });
-    //   // console.log("df", docRef.id);
-    //   if (docRef.id) {
-    //     toast.success("Form Submitted!", {
-    //       position: "top-right",
-    //       autoClose: 5000,
-    //       hideProgressBar: false,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //       theme: "light",
-    //     });
-    //     // redirect("/thanks");
-    //     navigate("/thanks");
-    //     setShowModal(false);
-    //     actions.resetForm();
-    //   }
-    // } catch (error) {
-    //   toast.error("Form submission failed, please try again!", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "light",
-    //   });
-    //   console.log(error);
-    // }
   };
   const finalSubmitHandler = async () => {
     try {
       const docRef = await addDoc(collection(db, "userData"), {
         ...data,
       });
-      // console.log("df", docRef.id);
+
       if (docRef.id) {
         toast.success("Form Submitted!", {
           position: "top-right",
@@ -95,7 +58,6 @@ const FormComponent = () => {
           progress: undefined,
           theme: "light",
         });
-        // redirect("/thanks");
         navigate("/thanks");
         setShowModal(false);
       }
@@ -126,8 +88,7 @@ const FormComponent = () => {
           >
             {(props) => {
               // const { errors, values, touched } = props;
-              const { errors, values } = props;
-              console.log("first", errors);
+              const { values } = props;
 
               return (
                 <Form className="">

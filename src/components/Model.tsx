@@ -7,7 +7,6 @@ interface DataType {
   gender: string;
 }
 const Model = (data: DataType) => {
-  console.log({ data });
   return (
     <div>
       <h4 className="mb-5 text-[#242E49]">
