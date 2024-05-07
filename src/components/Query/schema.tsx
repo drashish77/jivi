@@ -1,16 +1,24 @@
 import * as yup from "yup";
 
 export const formSchema = yup.object().shape({
+  id: yup.string(),
   heartRate: yup.string(),
-  SysBP: yup.string(),
-  DiBP: yup.string(),
+  bloodPressureSys: yup.string(),
+  bloodPressureDias: yup.string(),
   name: yup.string().required("The name is required"),
-  dob: yup.date(),
-  field: yup.mixed().oneOf(["male", "female"]),
-  email: yup
-    .string()
-    .email("Please enter a valid email")
-    .required("The email is required"),
-  mobile: yup.string().required("The mobile number is required"),
-  otherInfo: yup.string(),
+  dob: yup
+    .date()
+    .nullable()
+    .min(new Date(1900, 0, 1))
+    .required("The date is required"),
+  // gender: yup.mixed().oneOf(["male", "female", "other"]),
+  gender: yup
+    .mixed()
+    .oneOf(["male", "female", "other"] as const)
+    .defined("Please select a gender."),
+  // .required("The gender is required"),
+  // email: yup
+  //   .string()
+  //   .email("Please enter a valid email")
+  //   .required("The email is required"),
 });

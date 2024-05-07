@@ -1,52 +1,73 @@
-// import Image from "next/image";
-import {
-  MdPersonOutline,
-  MdOutlineMailOutline,
-  MdPhone,
-  MdChatBubbleOutline,
-  MdSettings,
-  MdGroup,
-  MdOutlineTransgender,
-} from "react-icons/md";
-
+import { db } from "../../../firebase";
+import uuid4 from "uuid4";
+import { collection, addDoc } from "firebase/firestore";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { formSchema } from "./schema";
-import { toast } from "react-hot-toast";
+
 import RangeInput from "./RangeInput";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import Model from "../Model";
 
 const FormComponent = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  // const toggleModal = () => {
+  //   setModal(!modal);
+  // };
+  var id = uuid4();
   interface FormValues {
     name: string;
-    email: string;
-    mobile: string;
-    otherInfo: string;
+    dob: string;
     heartRate: number;
     bloodPressureSys: number;
     bloodPressureDias: number;
     gender: string;
+    id: string;
   }
   const initialValues: FormValues = {
     name: "",
-    email: "",
-    mobile: "",
-    otherInfo: "",
-    heartRate: 1,
-    bloodPressureSys: 1,
-    bloodPressureDias: 1,
-    gender: "male",
+    dob: "",
+    heartRate: 80,
+    bloodPressureSys: 140,
+    bloodPressureDias: 75,
+    gender: "",
+    id: "",
   };
   const onSubmit = async (
     values: FormValues,
     actions: { resetForm: () => void }
   ) => {
     const payload = {
-      name: values.name,
-      email: values.email,
-      gender: values.gender,
-      mobile: values.mobile,
+      id: id,
       heartRate: values.heartRate,
-      otherInfo: values.otherInfo,
+      bloodPressureSys: values.bloodPressureSys,
+      bloodPressureDias: values.bloodPressureDias,
+      name: values.name,
+      dob: values.dob,
+      gender: values.gender,
     };
+
+    try {
+      const docRef = await addDoc(collection(db, "userData"), {
+        ...payload,
+      });
+      toast("Form Submitted!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setShowModal(false);
+      actions.resetForm();
+    } catch (error) {
+      console.log(error);
+    }
+    // console.log({ docRef });
     // fetch("/api/nodemailer", {
     //   method: "POST",
     //   body: JSON.stringify(payload),
@@ -63,221 +84,272 @@ const FormComponent = () => {
     //   .then((data) => console.log({ data }));
   };
   return (
-    <div className={`relative z-30 flex  w-full items-center justify-center `}>
-      <div className="">
-        <Formik
-          initialValues={initialValues}
-          validationSchema={formSchema}
-          onSubmit={onSubmit}
-        >
-          {(props) => {
-            // const { errors, values, touched } = props;
-            // const progress = (props.values.heartRate / 60) * 100;
-            return (
-              <Form className="">
-                {JSON.stringify(props.values)}
-                <div className="">
-                  <div className="h-[90px]">
-                    <h3 className="font-bold text-lg mb-2 ">
-                      Heart Rate:
-                      <span className="text-[#0F67FE] ml-2">
-                        {props.values.heartRate + 60}
-                      </span>
-                    </h3>
-                    {/* range */}
-                    <RangeInput
-                      value={props.values.heartRate}
-                      name="heartRate"
-                      color="#0F67FE"
-                    />
-                    <div className="mt-1 text-xs text-red-500 ">
-                      <ErrorMessage name="heartRate" />
-                    </div>
-                  </div>
-                  <div className="h-[90px]">
-                    <h3 className="font-bold text-lg mb-2 ">
-                      Blood pressure:
-                      <span className="text-[#0F67FE] ml-2">
-                        {props.values.bloodPressureSys + 60}
-                      </span>
-                    </h3>
-                    {/* range */}
-                    <RangeInput
-                      value={props.values.heartRate}
-                      color="#FA4D5E"
-                      name="bloodPressureSys"
-                    />
-                    <div className="mt-1 text-xs text-red-500 ">
-                      <ErrorMessage name="bloodPressureSys" />
-                    </div>
-                  </div>
-                  <div className="h-[90px]">
-                    {/* <h3 className="font-bold text-lg mb-2 ">
-                      Heart Rate:
-                      <span className="text-[#0F67FE] ml-2">
-                        {props.values.heartRate + 60}
-                      </span>
-                    </h3> */}
-                    {/* range */}
-                    <RangeInput
-                      name="bloodPressureDias"
-                      value={props.values.bloodPressureDias}
-                      color="#FA4D5E"
-                    />
-                    <div className="mt-1 text-xs text-red-500 ">
-                      <ErrorMessage name="bloodPressureDias" />
-                    </div>
-                  </div>
-                  <div className="h-[90px]">
-                    <div
-                      className={
-                        "flex items-center gap-2 rounded-lg border-[1px]  border-black/20 p-2 "
-                      }
-                    >
-                      <MdPersonOutline className="ml-2 h-[15px] w-[15px] object-contain md:h-[20px] md:w-[20px] 2xl:left-40" />
-                      <Field
-                        type="text"
-                        name="name"
-                        placeholder="Full Name"
-                        className="w-full  px-2 py-2"
-                      />
-                    </div>
-                    <div className="mt-1 text-xs text-red-500 ">
-                      <ErrorMessage name="name" />
-                    </div>
-                  </div>
-                  <div className="mb-5 grid h-[160px] grid-rows-2 gap-y-5 md:h-[90px] md:grid-cols-2 md:grid-rows-1 md:gap-2 lg:mb-0">
-                    <div className="">
-                      <div className="flex items-center gap-2 rounded-lg border-[1px]  border-black/20 p-4">
-                        <MdOutlineMailOutline className=" h-[20px] w-[20px] object-contain md:h-[25px] md:w-[25px] 2xl:left-40" />
-                        <Field
-                          type="email"
-                          name="email"
-                          placeholder="Work Email"
-                          className="block w-full placeholder:text-sm md:placeholder:text-base"
-                        />
-                      </div>
-                      <div className="mt-1 text-xs text-red-500 ">
-                        <ErrorMessage name="email" />
-                      </div>
-                    </div>
-                    <div className="">
-                      <div className="flex items-center gap-2 rounded-lg border-[1px]  border-black/20 p-4">
-                        <MdPhone className=" h-[20px] w-[20px] object-contain md:h-[25px] md:w-[25px] 2xl:left-40" />
-                        <Field
-                          type="tel"
-                          name="mobile"
-                          placeholder="Phone number"
-                          pattern="^[0-9]*$"
-                          maxLength={10}
-                          minLength={10}
-                          className="block w-full placeholder:text-sm md:placeholder:text-base"
-                        />
-                      </div>
-                      <div className="mt-1 text-xs text-red-500">
-                        <ErrorMessage name="mobile" />
-                      </div>
-                    </div>
-                  </div>
-                  {/* <div className="h-[90px]">
-                    <div className="flex gap-2 rounded-lg border-[1px]  border-black/20 p-4 ">
-                      <MdSettings className=" h-[20px] w-[20px] object-contain md:h-[25px] md:w-[25px] 2xl:left-40" />
-                      <Field
-                        as="select"
-                        name="requirementType"
-                        className="block w-full rounded-lg bg-white text-sm text-black/40 md:text-base"
-                      >
-                        <option value="" selected disabled hidden>
-                          Please select your Crewmate requirements
-                        </option>
-                        <option value="Frontend Engineer">
-                          Frontend Engineer
-                        </option>
-                        <option value="Backend Engineer">
-                          Backend Engineer
-                        </option>
-                        <option value="Mobile Developer">
-                          Mobile Developer
-                        </option>
-                        <option value="Full stack Engineer">
-                          Full stack Engineer
-                        </option>
-                        <option value="DevOps Engineer">DevOps Engineer</option>
-                        <option value="Testing-Manual">Testing-Manual</option>
-                        <option value="Testing-Automation">
-                          Testing-Automation
-                        </option>
-                        <option value="Designer">Designer</option>
-                      </Field>
-                    </div>
-                    <div className="mt-1 text-xs text-red-500 ">
-                      <ErrorMessage name="requirementType" />
-                    </div>
-                  </div> */}
-                  <div className="h-[90px]">
-                    <div className="flex gap-2 rounded-lg border-[1px]  border-black/20 p-4 ">
-                      <MdOutlineTransgender className=" h-[20px] w-[20px] object-contain md:h-[25px] md:w-[25px] 2xl:left-40" />
-                      <Field
-                        component="select"
-                        name="gender"
-                        className="block w-full rounded-lg bg-white  text-sm text-black/40 md:text-base"
-                      >
-                        <option value="" selected disabled hidden>
-                          Gender
-                        </option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </Field>
-                    </div>
-                    <div className="mt-1 text-xs text-red-500 ">
-                      <ErrorMessage name="gender" />
-                    </div>
-                  </div>
+    <div className={`relative   `}>
+      <div className={`relative z-30 w-full md:w-2/3 lg:w-1/3 mx-auto  `}>
+        <div className="">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={formSchema}
+            onSubmit={onSubmit}
+          >
+            {(props) => {
+              const { errors, values, touched } = props;
+              console.log("first", errors);
+
+              return (
+                <Form className="">
+                  <div className="">{JSON.stringify(props.values)}</div>
                   <div className="">
-                    <div className="flex items-start gap-2 rounded-lg border-[1px]  border-black/20 p-3 2xl:p-4 ">
-                      <MdChatBubbleOutline className=" w-[15px ] mt-1 h-[15px] object-contain md:h-[20px] md:w-[20px] 2xl:left-40" />
-                      <Field
-                        component="textarea"
-                        rows={5}
-                        cols={40}
-                        name="otherInfo"
-                        placeholder="Tell us about your hiring requirements."
-                        className=" block w-full placeholder:text-sm md:placeholder:text-base"
-                        // className='w-full rounded-lg border p-4'
+                    <div className="mt-10">
+                      <h3 className="font-bold text-lg mb-2 ">
+                        Heart Rate:
+                        <span className="text-[#0F67FE] ml-2">
+                          {props.values.heartRate + 60}
+                        </span>
+                      </h3>
+                      <RangeInput
+                        value={props.values.heartRate}
+                        name="heartRate"
+                        color="#0F67FE"
+                        min={60}
+                        max={120}
                       />
+                      <div className="mt-1 text-xs text-red-500 ">
+                        <ErrorMessage name="heartRate" />
+                      </div>
+                    </div>
+                    <div className="mt-10">
+                      <h3 className="font-bold text-lg mb-2 ">
+                        Blood pressure:
+                        <span className="text-[#0F67FE] ml-2">
+                          {props.values.bloodPressureSys}
+                        </span>
+                      </h3>
+                      <h3 className=" text-md mb-2 ">
+                        Systolic:
+                        <span className="text-[#0F67FE] ml-2">
+                          {props.values.bloodPressureSys}
+                        </span>
+                      </h3>
+                      <RangeInput
+                        value={props.values.bloodPressureSys}
+                        color="#FA4D5E"
+                        name="bloodPressureSys"
+                        min={120}
+                        max={150}
+                      />
+                      <div className="mt-1 text-xs text-red-500 ">
+                        <ErrorMessage name="bloodPressureSys" />
+                      </div>
+                    </div>
+                    <div className="mt-10">
+                      <h3 className=" text-md mb-2 mt-8">
+                        Diastolic:
+                        <span className="text-[#0F67FE] ml-2">
+                          {props.values.bloodPressureDias}
+                        </span>
+                      </h3>
+                      <RangeInput
+                        name="bloodPressureDias"
+                        value={props.values.bloodPressureDias}
+                        color="#FA4D5E"
+                        min={60}
+                        max={80}
+                      />
+                      <div className="mt-1 text-xs text-red-500 ">
+                        <ErrorMessage name="bloodPressureDias" />
+                      </div>
+                    </div>
+                    <div className="mt-10 relative">
+                      <label
+                        htmlFor="name"
+                        className="text-sm font-extrabold text-[#242E49]"
+                      >
+                        Name <span className="text-[#DA1E2E] font-bold">*</span>{" "}
+                      </label>
+                      <div
+                        className={
+                          "flex items-center gap-2 rounded-lg border-[1px]  border-black/20 p-2 mt-2"
+                        }
+                      >
+                        <img
+                          src="/user.svg"
+                          alt=""
+                          className="ml-2 h-[15px] w-[15px] object-contain md:h-[20px] md:w-[20px] 2xl:left-40"
+                        />
+
+                        <Field
+                          type="text"
+                          name="name"
+                          placeholder="Please enter your name"
+                          className="w-full  px-2 py-2 focus:outline-none"
+                        />
+                      </div>
+                      <div className="absolute mt-1 text-xs text-red-500 ">
+                        <ErrorMessage name="name" />
+                      </div>
+                    </div>
+                    <div className="mt-8 relative">
+                      <label
+                        htmlFor="dob"
+                        className="text-sm font-extrabold text-[#242E49]"
+                      >
+                        Date of Birth
+                        <span className="text-[#DA1E2E] font-bold"> *</span>
+                      </label>{" "}
+                      <div className="flex items-center gap-2 rounded-lg border-[1px]  border-black/20 p-4 mt-2">
+                        <img
+                          src="/calender.svg"
+                          alt=""
+                          className="mr-2 h-[15px] w-[15px] object-contain md:h-[20px] md:w-[20px] 2xl:left-40"
+                        />
+
+                        <Field
+                          type="date"
+                          name="dob"
+                          placeholder="Date of birth"
+                          className="block w-full placeholder:text-sm md:placeholder:text-base focus:outline-none"
+                        />
+                      </div>
+                      <div className="absolute mt-1 text-xs text-red-500 ">
+                        <ErrorMessage name="dob" />
+                      </div>
+                    </div>
+
+                    <div className="mt-8 relative">
+                      <label
+                        htmlFor="gender"
+                        className="text-sm font-extrabold text-[#242E49]"
+                      >
+                        Gender
+                        <span className="text-[#DA1E2E] font-bold"> *</span>
+                      </label>
+                      <div className="flex gap-2 rounded-lg border-[1px]  border-black/20 p-4 mt-2">
+                        <img
+                          src="/gender.svg"
+                          alt=""
+                          className="mr-2 h-[15px] w-[15px] object-contain md:h-[20px] md:w-[20px] 2xl:left-40"
+                        />
+
+                        <Field
+                          component="select"
+                          name="gender"
+                          className=" block focus:outline-none w-full rounded-lg bg-white  text-sm text-black/40 md:text-base"
+                        >
+                          <option value="" label="Select a color">
+                            Select a gender{" "}
+                          </option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                        </Field>
+                      </div>
+                      <div className="absolute mt-1 text-xs text-red-500 ">
+                        <ErrorMessage name="gender" />
+                      </div>
                     </div>
                   </div>
-                  {/* <CustomCheckBox type='checkbox' name='acceptedTC' /> */}
-                </div>
-                {/* <button
-                  type='submit'
-                  disabled={props.isSubmitting}
-                  className='rounded-large custom-button-new flex border'
-                >
-                  <span className='relative top-px text-sm font-bold '>
-                    Submit
-                  </span>
-                  <ArrowRightIcon className='ml-2 h-4 w-4' />
-                </button> */}
-                {/* <div className='py-4'>
-                  <CustomButton type='submit' className='w-full'>
-                    Submit
-                  </CustomButton>
-                </div> */}
-                <div className=" relative mb-5 mt-8 lg:mt-8 ">
-                  <button
-                    type="submit"
-                    disabled={props.isSubmitting}
-                    className="button-gradient group relative  w-full rounded-full px-10 py-3 text-center  transition-all duration-[400ms] hover:md:-translate-y-1"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </Form>
-            );
-          }}
-        </Formik>
+
+                  <div className=" relative mb-5 mt-8 lg:mt-8 ">
+                    {/* <button
+                      disabled={!errors}
+                      className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => !errors && setShowModal(true)}
+                    >
+                      Edit
+                    </button> */}
+                    <button
+                      type="submit"
+                      // type="button"
+                      disabled={!props.errors}
+                      className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
+                    >
+                      Next
+                    </button>
+                    {/* <button
+                      type="submit"
+                      disabled={props.isSubmitting}
+                      className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
+                    >
+                      Next
+                    </button> */}
+                  </div>
+                  {showModal ? (
+                    <>
+                      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                        <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                          {/*content*/}
+                          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                            {/*header*/}
+                            <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                              <Model {...values} />
+                              {/* <h3 className="text-xl font-semibold">
+                                Please confirm your details to continue.
+                              </h3> */}
+                              <button
+                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                onClick={() => setShowModal(false)}
+                              >
+                                <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                  ×
+                                </span>
+                              </button>
+                            </div>
+                            {/*body*/}
+                            {/* <div className="relative p-6 flex-auto">
+                              <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
+                                I always felt like I could do anything. That’s
+                                the main thing people are controlled by!
+                                Thoughts- their perception of themselves!
+                                They're slowed down by their perception of
+                                themselves. If you're taught you can’t do
+                                anything, you won’t do anything. I was taught I
+                                could do everything.
+                              </p>
+                            </div> */}
+                            {/*footer*/}
+                            <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                              <button
+                                // className="bg-[#DCE1E8]/90 text-white active:bg-[#DCE1E8] font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                className="bg-[#DCE1E8]/90 w-1/2 text-white active:bg-[#DCE1E8] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                type="button"
+                                onClick={() => setShowModal(false)}
+                              >
+                                Edit
+                              </button>
+                              {/* <button
+                                className="bg-[#0F67FE]/90 w-1/2 text-white active:bg-[#0F67FE] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                type="submit"
+                                disabled={props.isSubmitting}
+                                onClick={() => setShowModal(false)}
+                              >
+                                Submit
+                              </button> */}
+                              <button
+                                type="submit"
+                                disabled={props.isSubmitting}
+                                // onClick={() =>
+                                //   setTimeout(function () {
+                                //     setShowModal(false);
+                                //   }, 2000)
+                                // }
+                                className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
+                              >
+                                Submit
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                    </>
+                  ) : null}
+                </Form>
+              );
+            }}
+          </Formik>
+        </div>
       </div>
     </div>
   );

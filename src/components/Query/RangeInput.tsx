@@ -2,10 +2,12 @@ import { Field } from "formik";
 
 interface RangeInputType {
   value: number;
+  min: number;
+  max: number;
   color: string;
   name: string;
 }
-const RangeInput = ({ value, color, name }: RangeInputType) => {
+const RangeInput = ({ value, color, name, min, max }: RangeInputType) => {
   const progress = (value / 60) * 100;
   return (
     <div className={"flex items-center  gap-2 rounded-lg  p-2 relative"}>
@@ -17,7 +19,9 @@ const RangeInput = ({ value, color, name }: RangeInputType) => {
         style={{
           background: `linear-gradient(to right, ${color} ${progress}%, #DCE1E8 ${progress}%)`,
         }}
-        className={`slider w-full h-2  cursor-pointer appearance-none rounded-sm bg-${color} [&::-webkit-slider-thumb]:!bg-primary`}
+        className={`slider w-full h-2  cursor-pointer appearance-none rounded-sm ${
+          color !== "#FA4D5E" ? "sliderBlue" : "sliderRed"
+        } [&::-webkit-slider-thumb]:!bg-primary`}
       />
       <span
         style={{ insetInlineStart: `${Math.floor(progress)}%` }}
@@ -46,7 +50,7 @@ const RangeInput = ({ value, color, name }: RangeInputType) => {
         className="text-sm text-gray-500  absolute start-0 -bottom-6"
         style={{ display: progress === 0 ? "none" : "" }}
       >
-        60
+        {min}
       </span>
       {/* <span className="text-sm text-gray-500  absolute start-1/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
         80
@@ -58,7 +62,7 @@ const RangeInput = ({ value, color, name }: RangeInputType) => {
         className="text-sm text-gray-500  absolute end-0 -bottom-6"
         style={{ display: progress === 100 ? "none" : "" }}
       >
-        {">"} 120
+        {">"} {max}
       </span>
     </div>
   );
