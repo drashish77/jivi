@@ -168,7 +168,7 @@ const FormComponent = () => {
                       >
                         <img
                           src="/user.svg"
-                          alt=""
+                          alt="user icon"
                           className="ml-2 h-[15px] w-[15px] object-contain md:h-[20px] md:w-[20px] 2xl:left-40"
                         />
 
@@ -194,7 +194,7 @@ const FormComponent = () => {
                       <div className="flex items-center gap-2 rounded-lg border-[1px]  border-black/20 p-4 mt-2">
                         <img
                           src="/calender.svg"
-                          alt=""
+                          alt="calender icon"
                           className="mr-2 h-[15px] w-[15px] object-contain md:h-[20px] md:w-[20px] 2xl:left-40"
                         />
 
@@ -221,7 +221,7 @@ const FormComponent = () => {
                       <div className="flex gap-2 rounded-lg border-[1px]  border-black/20 p-4 mt-2">
                         <img
                           src="/gender.svg"
-                          alt=""
+                          alt="gender icon"
                           className="mr-2 h-[15px] w-[15px] object-contain md:h-[20px] md:w-[20px] 2xl:left-40"
                         />
 

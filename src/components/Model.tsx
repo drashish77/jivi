@@ -30,17 +30,17 @@ const Model = ({
               <h4 className="mb-5 text-[#242E49]">
                 Please confirm your details to continue.
               </h4>
-              <div className="space-y-2 ">
+              <div className="space-y-5 ">
                 <div className="">
                   <span className="font-semibold">Heart Rate: </span>
                   <span className="">{data.heartRate} bpm</span>{" "}
                 </div>
                 <div className="font-semibold">Blood Pressure: </div>
-                <div className="ml-2 font-medium text-sm">
+                <div className=" font-medium text-sm">
                   Systolic:{" "}
                   <span className="">{data.bloodPressureSys} mmHg</span>{" "}
                 </div>
-                <div className="ml-2 font-medium text-sm">
+                <div className=" font-medium text-sm">
                   Diastolic:{" "}
                   <span className="">{data.bloodPressureDias} mmHg</span>{" "}
                 </div>
