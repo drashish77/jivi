@@ -230,7 +230,7 @@ const FormComponent = () => {
                           name="gender"
                           className=" block focus:outline-none w-full rounded-lg bg-white  text-sm text-black/40 md:text-base"
                         >
-                          <option value="" label="Select a color">
+                          <option value="" label="Select a Gender">
                             Select a gender{" "}
                           </option>
                           <option value="male">Male</option>

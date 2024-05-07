@@ -14,18 +14,18 @@ const Model = ({
   isSubmitting,
 }: {
   data: DataType;
-  finalSubmitHandler: any;
+  finalSubmitHandler: Function;
   setShowModal: Function;
   isSubmitting: any;
 }) => {
   return (
     <div>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-auto my-6 mx-auto max-w-3xl">
+        <div className="relative w-11/12 md:w-1/2 my-6 mx-auto max-w-3xl">
           {/*content*/}
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             <h2 className="pt-5 pb-3 border-b ml-4">Preview</h2>
-            {/*header*/}
+
             <div className="px-5 pt-5">
               <h4 className="mb-5 text-[#242E49]">
                 Please confirm your details to continue.
@@ -81,7 +81,7 @@ const Model = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                onClick={finalSubmitHandler}
+                onClick={() => finalSubmitHandler()}
                 className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] font-bold hover:md:-translate-y-1 text-base"
               >
                 Submit
