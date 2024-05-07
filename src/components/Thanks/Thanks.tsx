@@ -1,5 +1,3 @@
-import React from "react";
-
 const Thanks = () => {
   return (
     <div className="relative z-30 w-full md:w-2/3 lg:w-1/3 mx-auto">

@@ -76,20 +76,10 @@ const FormComponent = () => {
       console.log(error);
     }
   };
-  const onChange = async (
-    values: FormValues,
-    actions: { resetForm: () => void }
-  ) => {
-    const payload = {
-      id: id,
-      heartRate: values.heartRate,
-      bloodPressureSys: values.bloodPressureSys,
-      bloodPressureDias: values.bloodPressureDias,
-      name: values.name,
-      dob: values.dob,
-      gender: values.gender,
-    };
-  };
+  // const onChange = async (
+  //   values: FormValues
+  //   // actions: { resetForm: () => void }
+  // ) => {};
   return (
     <div className={`relative   `}>
       <div className={`relative z-30 w-full md:w-2/3 lg:w-1/3 mx-auto  `}>
@@ -100,10 +90,11 @@ const FormComponent = () => {
             validationSchema={formSchema}
             validateOnChange={true}
             onSubmit={onSubmit}
-            onChange={onChange}
+            // onChange={onChange}
           >
             {(props) => {
-              const { errors, values, touched } = props;
+              const { errors, values } = props;
+              // const { errors, values, touched } = props;
               console.log("first", errors);
 
               return (
