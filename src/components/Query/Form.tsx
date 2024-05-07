@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const FormComponent = () => {
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState({});
   let navigate = useNavigate();
   // const toggleModal = () => {
   //   setModal(!modal);
@@ -40,10 +41,47 @@ const FormComponent = () => {
       dob: values.dob,
       gender: values.gender,
     };
-
+    setData(payload);
+    setShowModal(true);
+    // try {
+    //   const docRef = await addDoc(collection(db, "userData"), {
+    //     ...payload,
+    //   });
+    //   // console.log("df", docRef.id);
+    //   if (docRef.id) {
+    //     toast.success("Form Submitted!", {
+    //       position: "top-right",
+    //       autoClose: 5000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //       theme: "light",
+    //     });
+    //     // redirect("/thanks");
+    //     navigate("/thanks");
+    //     setShowModal(false);
+    //     actions.resetForm();
+    //   }
+    // } catch (error) {
+    //   toast.error("Form submission failed, please try again!", {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "light",
+    //   });
+    //   console.log(error);
+    // }
+  };
+  const finalSubmitHandler = async () => {
     try {
       const docRef = await addDoc(collection(db, "userData"), {
-        ...payload,
+        ...data,
       });
       // console.log("df", docRef.id);
       if (docRef.id) {
@@ -60,7 +98,6 @@ const FormComponent = () => {
         // redirect("/thanks");
         navigate("/thanks");
         setShowModal(false);
-        actions.resetForm();
       }
     } catch (error) {
       toast.error("Form submission failed, please try again!", {
@@ -76,25 +113,19 @@ const FormComponent = () => {
       console.log(error);
     }
   };
-  // const onChange = async (
-  //   values: FormValues
-  //   // actions: { resetForm: () => void }
-  // ) => {};
   return (
     <div className={`relative   `}>
       <div className={`relative z-30 w-full md:w-2/3 lg:w-1/3 mx-auto  `}>
-        <h2 className="pt-5 pb-3 border-b">Details</h2>
+        <h2 className="pt-5 pb-3 border-b ">Details</h2>
         <div className="">
           <Formik
             initialValues={initialValues}
             validationSchema={formSchema}
             validateOnChange={true}
             onSubmit={onSubmit}
-            // onChange={onChange}
           >
             {(props) => {
-              const { errors, values } = props;
-              // const { errors, values, touched } = props;
+              const { errors, values, touched } = props;
               console.log("first", errors);
 
               return (
@@ -253,29 +284,11 @@ const FormComponent = () => {
 
                   <div className=" relative mb-5 mt-8 lg:mt-8 ">
                     <button
-                      // disabled={!errors}
-                      // className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
                       type="submit"
-                      onClick={() => !errors && setShowModal(true)}
                     >
                       Next
                     </button>
-                    {/* <button
-                      type="submit"
-                      // type="button"
-                      disabled={!props.errors}
-                      className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
-                    >
-                      Next
-                    </button> */}
-                    {/* <button
-                      type="submit"
-                      disabled={props.isSubmitting}
-                      className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
-                    >
-                      Next
-                    </button> */}
                   </div>
                   {showModal ? (
                     <>
@@ -283,60 +296,36 @@ const FormComponent = () => {
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
                           {/*content*/}
                           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                            <h2 className="pt-5 pb-3 border-b ml-4">Preview</h2>
                             {/*header*/}
                             <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                               <Model {...values} />
-                              {/* <h3 className="text-xl font-semibold">
-                                Please confirm your details to continue.
-                              </h3> */}
+
                               <button
-                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                className="p-1 ml-auto absolute right-3 top-3 rounded-full bg-red-500 border-0 text-black  float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                                 onClick={() => setShowModal(false)}
                               >
-                                <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                  ×
+                                <span className="flex justify-center items-center bg-transparent text-white mb-1 h-6 w-7 text-xl  outline-none focus:outline-none">
+                                  x
                                 </span>
                               </button>
                             </div>
-                            {/*body*/}
-                            {/* <div className="relative p-6 flex-auto">
-                              <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-                                I always felt like I could do anything. That’s
-                                the main thing people are controlled by!
-                                Thoughts- their perception of themselves!
-                                They're slowed down by their perception of
-                                themselves. If you're taught you can’t do
-                                anything, you won’t do anything. I was taught I
-                                could do everything.
-                              </p>
-                            </div> */}
-                            {/*footer*/}
-                            <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+
+                            <div className="flex items-center justify-end p-6 gap-2 border-t border-solid border-blueGray-200 rounded-b">
                               <button
-                                // className="bg-[#DCE1E8]/90 text-white active:bg-[#DCE1E8] font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                className="bg-[#DCE1E8]/90 w-1/2 text-white active:bg-[#DCE1E8] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                // className="bg-[#DCE1E8]/90 w-1/2 text-white active:bg-[#DCE1E8] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                className="button-gradient group relativ bg-[#DCE1E8] text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] font-bold hover:md:-translate-y-1 text-base"
                                 type="button"
                                 onClick={() => setShowModal(false)}
                               >
                                 Edit
                               </button>
-                              {/* <button
-                                className="bg-[#0F67FE]/90 w-1/2 text-white active:bg-[#0F67FE] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                type="submit"
-                                disabled={props.isSubmitting}
-                                onClick={() => setShowModal(false)}
-                              >
-                                Submit
-                              </button> */}
+
                               <button
                                 type="submit"
                                 disabled={props.isSubmitting}
-                                // onClick={() =>
-                                //   setTimeout(function () {
-                                //     setShowModal(false);
-                                //   }, 2000)
-                                // }
-                                className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] hover:md:-translate-y-1 text-base"
+                                onClick={finalSubmitHandler}
+                                className="button-gradient group relativ bg-blue-700 text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] font-bold hover:md:-translate-y-1 text-base"
                               >
                                 Submit
                               </button>
