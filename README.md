@@ -1,30 +1,25 @@
-# React + TypeScript + Vite
+## Technologies Used
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Reactjs: Reactjs is a React framework for building server-side rendered and statically generated applications.
 
-Currently, two official plugins are available:
+- Tailwind CSS: Tailwind CSS is a utility-first CSS framework for quickly building custom designs.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Icons: React-Icons provides popular icon packs as React components.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- created custom range component to get data of heart rate, blood pressure.
+- Added form validation using Yup.
+- Utilizes React-Icons library for icons.
+- Responsive design powered by TailwindCSS.
 
-- Configure the top-level `parserOptions` property like this:
+## Setup/Installation
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- Clone the repository.
+- Install dependencies using npm.
+- Run the development server with npm run dev.
+- Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Usage
+
+- Capturing user form data for health checkup
