@@ -29,8 +29,8 @@ const FormComponent = () => {
     id: "",
   };
   const onSubmit = async (
-    values: FormValues,
-    actions: { resetForm: () => void }
+    values: FormValues
+    // actions: { resetForm: () => void }
   ) => {
     const payload = {
       id: id,
@@ -125,7 +125,8 @@ const FormComponent = () => {
             onSubmit={onSubmit}
           >
             {(props) => {
-              const { errors, values, touched } = props;
+              // const { errors, values, touched } = props;
+              const { errors, values } = props;
               console.log("first", errors);
 
               return (
@@ -313,7 +314,6 @@ const FormComponent = () => {
 
                             <div className="flex items-center justify-end p-6 gap-2 border-t border-solid border-blueGray-200 rounded-b">
                               <button
-                                // className="bg-[#DCE1E8]/90 w-1/2 text-white active:bg-[#DCE1E8] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                 className="button-gradient group relativ bg-[#DCE1E8] text-white w-full rounded-xl px-10 py-5 text-center  transition-all duration-[400ms] font-bold hover:md:-translate-y-1 text-base"
                                 type="button"
                                 onClick={() => setShowModal(false)}
