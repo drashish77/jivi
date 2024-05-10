@@ -1,11 +1,4 @@
-interface DataType {
-  heartRate: number;
-  bloodPressureSys: number;
-  bloodPressureDias: number;
-  name: string;
-  dob: string;
-  gender: string;
-}
+import { DataType } from "../../utlis/Types";
 
 const Model = ({
   data,
