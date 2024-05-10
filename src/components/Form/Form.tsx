@@ -77,7 +77,7 @@ const FormComponent = () => {
   };
   return (
     <div className={`relative   `}>
-      <div className={`relative z-30 w-11/12 md:w-2/3 lg:w-1/3 mx-auto  `}>
+      <div className={`relative z-30 w-10/12 md:w-2/3 lg:w-1/3 mx-auto  `}>
         <h2 className="pt-5 pb-3 border-b ">Details</h2>
         <div className="">
           <Formik
@@ -95,12 +95,7 @@ const FormComponent = () => {
                   {/* <div className="">{JSON.stringify(props.values)}</div> */}
                   <div className="">
                     <div className="mt-10">
-                      <h3 className="font-bold text-lg mb-2 ">
-                        Heart Rate:
-                        <span className="text-[#0F67FE] ml-2">
-                          {props.values.heartRate}
-                        </span>
-                      </h3>
+                      <h3 className="font-bold text-lg mb-2 ">Heart Rate:</h3>
                       <RangeInput
                         value={props.values.heartRate}
                         name="heartRate"
@@ -115,16 +110,8 @@ const FormComponent = () => {
                     <div className="mt-10">
                       <h3 className="font-bold text-lg mb-2 ">
                         Blood pressure:
-                        <span className="text-[#0F67FE] ml-2">
-                          {props.values.bloodPressureSys}
-                        </span>
                       </h3>
-                      <h3 className=" text-md mb-2 ">
-                        Systolic:
-                        <span className="text-[#0F67FE] ml-2">
-                          {props.values.bloodPressureSys}
-                        </span>
-                      </h3>
+                      <h3 className=" text-md mb-2 ">Systolic:</h3>
                       <RangeInput
                         value={props.values.bloodPressureSys}
                         color="#FA4D5E"
@@ -139,9 +126,9 @@ const FormComponent = () => {
                     <div className="mt-10">
                       <h3 className=" text-md mb-2 mt-8">
                         Diastolic:
-                        <span className="text-[#0F67FE] ml-2">
+                        {/* <span className="text-[#0F67FE] ml-2">
                           {props.values.bloodPressureDias}
-                        </span>
+                        </span> */}
                       </h3>
                       <RangeInput
                         name="bloodPressureDias"
